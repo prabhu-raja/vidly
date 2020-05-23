@@ -45,6 +45,17 @@ router.put('/:id', (req, res) => {
   res.send(genre);
 });
 
+router.delete('/:id', (req, res) => {
+  // * 404 - Not Found
+  const genre = genres.find(val => val.id === parseInt(req.params.id));
+  if (!genre) {
+    return res.status(404).send('Genre Id not found 😈')
+  }
+  const indx = genres.indexOf(genre);
+  genres.splice(indx, 1);
+  res.send(genre);
+});
+
 function validateGenre(genre) {
   const schema = {
     name: Joi.string().min(3).required()
