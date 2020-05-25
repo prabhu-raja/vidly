@@ -14,27 +14,13 @@ const genreSchema = new mongoose.Schema({
 });
 
 const Genre = mongoose.model('Genre', genreSchema);
-/*
-const genres = [
-  { id: 1, name: 'Action 🚗 💨' },  
-  { id: 2, name: 'Horror 👹' },  
-  { id: 3, name: 'Romance 👩‍❤️‍👨' },  
-];
-*/
 
-async function getAllGenres() {
- const genres = await Genre
+router.get('/', async (req, res) => {
+  const genres = await Genre
     .find()
     .sort({name: 'asc'})
     .select({name: 1});
-  return genres;
-}
-
-router.get('/', (req, res) => {
-  getAllGenres()
-    .then(val => {
-      res.send(val);
-    });
+  res.send(genres);
 });
 
 async function createGenre(name) {
