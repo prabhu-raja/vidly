@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
 const genres = require('./routes/genres');
-const debug  =require('debug')('node:index');
+const debug = require('debug')('node:index');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/vidly')
+  .then(() => debug('☘️ ☘️ Connected to Mongo DB ☘️ ☘️'))
+  .catch(err => debug('🍃 🍃 Unable to connect Mongo 🍃 🍃', err));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
