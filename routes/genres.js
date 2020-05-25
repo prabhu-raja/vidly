@@ -23,13 +23,15 @@ router.get('/', async (req, res) => {
   res.send(genres);
 });
 
-async function createGenre(name) {
-  const genre = new Genre({
-    name
-  });
+router.post('/', async (req, res) => {
+  const { error } = validateGenre(req.body);
+  if (error) { return res.status(400).send(error.details[0].message); }
+  //
+  const genre = new Genre({ name: req.body.name });
   try {
     await genre.validate();
-    return await genre.save();
+    const result = await genre.save();
+    res.send(result);
   } catch (err) {
     for (const field in err.errors) {
       if (err.errors.hasOwnProperty(field)) {
@@ -37,20 +39,6 @@ async function createGenre(name) {
       }
     }
   }
-}
-
-router.post('/', (req, res) => {
-  const { error } = validateGenre(req.body);
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
-  // const genre = {
-  //   id: genres.length + 1,
-  //   name: req.body.name
-  // }
-  // genres.push(genre);
-  createGenre(req.body.name)
-    .then(val => res.send(val));
 });
 
 router.put('/:id', (req, res) => {
