@@ -61,12 +61,11 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   // * 404 - Not Found
-  const genre = await Genre.findById(req.params.id);
+  const genre = await Genre.findByIdAndRemove(req.params.id);
   if (!genre) { return res.status(404).send('Genre Id not found 😈')}
 
-  const result = await Genre.deleteOne({_id: req.params.id});
-  debug('Deleted ❌ ', result);
-  res.send(result);
+  debug('Deleted ❌ ', genre);
+  res.send(genre);
 });
 
 router.get('/:id', async (req, res) => {
