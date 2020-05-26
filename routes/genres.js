@@ -69,9 +69,6 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  // * 400 - Bad Request
-  const { error } = validateGenre(req.body);
-  if (error) { return res.status(400).send(error.details[0].message); }
   // * 404 - Not Found
   const genre = await Genre.findById(req.params.id).select('name');
   if (!genre) { return res.status(404).send('Genre Id not found 😈')}
