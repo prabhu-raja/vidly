@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
     .find()
     .sort({name: 'asc'})
     .select({name: 1});
+  debug('Get all Genres 🛒', genres);
   res.send(genres);
 });
 
@@ -31,6 +32,7 @@ router.post('/', async (req, res) => {
   try {
     await genre.validate();
     const result = await genre.save();
+    debug('Post 📮', result);
     res.send(result);
   } catch (err) {
     for (const field in err.errors) {
@@ -53,26 +55,29 @@ router.put('/:id', async (req, res) => {
   if (!genre) { return res.status(404).send('Genre Id not found 😈')}
 
   // * 200  - Update
+  debug('Updated 😎', genre);
   res.send(genre);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // * 404 - Not Found
-  const genre = genres.find(val => val.id === parseInt(req.params.id));
-  if (!genre) {
-    return res.status(404).send('Genre Id not found 😈')
-  }
-  const indx = genres.indexOf(genre);
-  genres.splice(indx, 1);
-  res.send(genre);
+  const genre = await Genre.findById(req.params.id);
+  if (!genre) { return res.status(404).send('Genre Id not found 😈')}
+
+  const result = await Genre.deleteOne({_id: req.params.id});
+  debug('Deleted ❌ ', result);
+  res.send(result);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
+  // * 400 - Bad Request
+  const { error } = validateGenre(req.body);
+  if (error) { return res.status(400).send(error.details[0].message); }
   // * 404 - Not Found
-  const genre = genres.find(val => val.id === parseInt(req.params.id));
-  if (!genre) {
-    return res.status(404).send('Genre Id not found 😈')
-  }
+  const genre = await Genre.findById(req.params.id).select('name');
+  if (!genre) { return res.status(404).send('Genre Id not found 😈')}
+
+  debug('Get by Id 🛍 ', genre);
   res.send(genre);
 });
 
