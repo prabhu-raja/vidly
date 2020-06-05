@@ -32,4 +32,5 @@ function validateCustomer(course) {
 }
 
 exports.Customer = Customer;
+exports.customersSchema = customersSchema;
 exports.validate = validateCustomer;
