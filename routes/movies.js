@@ -31,8 +31,9 @@ router.post('/', async(req, res) => {
   });
   try {
     await movie.validate;
-    const result = await movie.save();
-    res.send(result);
+    await movie.save();
+    // res.send(result);
+    res.send(movie);
   } catch (err) {
     for (field in err.errors) {
       debug('😡', err.errors[field].message);

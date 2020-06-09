@@ -6,6 +6,8 @@ const movies =  require('./routes/movies');
 const rentals = require('./routes/rentals');
 const debug = require('debug')('node:index');
 const mongoose = require('mongoose');
+const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 
 mongoose.connect('mongodb://localhost/vidly')
   .then(() => debug('☘️ ☘️ Connected to Mongo DB ☘️ ☘️'))
