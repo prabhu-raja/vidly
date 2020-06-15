@@ -28,10 +28,10 @@ const rentalSchema = new mongoose.Schema({
     type: Date,
     required: true,
     default: Date.now()
-   },
+  },
   dateReturned: {
     type: Date
-   },
+  },
   rentalFee: { 
     type: Number,
     min: 0
