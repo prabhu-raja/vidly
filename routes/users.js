@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const _ = require('lodash');
 const debug = require('debug')('node:user');
 const { User, validate } = require('../models/user');
 
@@ -15,16 +16,12 @@ router.post('/', async (req, res) => {
   //
   let user = await User.findOne({email: req.body.email});
   if (user) { return res.status(400).send('User already registered'); }
-  
-  user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password
-  });
+  user = new User(_.pick(req.body, ['name', 'email', 'password']));
+  debug('🌈', _.pick(req.body, ['name', 'email', 'password']));
   try {
     await user.validate();
     const result = await user.save();
-    res.send(result);
+    res.send(_.pick(result, ['name', 'email']));
   } catch (err) {
     for (const field in err.errors) {
       if (err.errors.hasOwnProperty(field)) {
