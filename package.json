@@ -19,6 +19,7 @@
   "homepage": "https://github.com/prabhu-raja/vidly#readme",
   "dependencies": {
     "bcrypt": "^1.0.3",
+    "config": "^3.3.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "fawn": "^2.1.5",

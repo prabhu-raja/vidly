@@ -8,8 +8,15 @@ const users = require('./routes/users');
 const auth = require('./routes/auth');
 const debug = require('debug')('node:index');
 const mongoose = require('mongoose');
+const config = require('config');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
+
+if (!config.get('jwtPrivateKey')) {
+  debug('FATAL ERROR: jwtPrivateKey is not defined');
+  process.exit(1); // * 0 means success. except 0 it's error
+}
+debug(`Conf val - ${config.get('jwtPrivateKey')}`);
 
 mongoose.connect('mongodb://localhost/vidly')
   .then(() => debug('☘️ ☘️ Connected to Mongo DB ☘️ ☘️'))
