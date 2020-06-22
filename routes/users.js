@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const debug = require('debug')('node:user');
 const { User, validate } = require('../models/user');
 
@@ -23,7 +25,11 @@ router.post('/', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
     const result = await user.save();
-    res.send(_.pick(result, ['name', 'email']));
+
+    const token = jwt.sign({_id: user._id}, config.get('jwtPrivateKey'));
+    res
+      .header('x-auth-token', token)
+      .send(_.pick(result, ['_id', 'name', 'email']));
   } catch (err) {
     for (const field in err.errors) {
       if (err.errors.hasOwnProperty(field)) {
