@@ -4,6 +4,13 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const debug = require('debug')('node:user');
 const { User, validate } = require('../models/user');
+const auth = require('../middleware/auth');
+
+router.get('/me', auth, async (req, res) => {
+  debug('From User - ', req.user);
+  const user = await User.findById(req.user._id).select('-password');
+  res.send(user);
+});
 
 router.get('/', async (req, res) => {
   const users = await User.find();

@@ -19,9 +19,10 @@ router.post('/', auth, async (req, res) => {
   //
   const genre = new Genre({ name: req.body.name });
   try {
+    debug('🏳️‍🌈 Genre req.user', req.user);
     await genre.validate();
     const result = await genre.save();
-    debug('Post 📮', result);
+    debug('Post Genre Res.send 📮', result);
     res.send(result);
   } catch (err) {
     for (const field in err.errors) {
