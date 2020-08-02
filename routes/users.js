@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
   //
   let user = await User.findOne({email: req.body.email});
   if (user) { return res.status(400).send('User already registered'); }
-  user = new User(_.pick(req.body, ['name', 'email', 'password']));
+  user = new User(_.pick(req.body, ['name', 'email', 'password', 'isAdmin']));
   try {
     await user.validate();
     const salt = await bcrypt.genSalt(10);
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
     // const token = jwt.sign({_id: user._id}, config.get('jwtPrivateKey'));
     res
       .header('x-auth-token', token)
-      .send(_.pick(result, ['_id', 'name', 'email']));
+      .send(_.pick(result, ['_id', 'name', 'email', 'isAdmin']));
   } catch (err) {
     for (const field in err.errors) {
       if (err.errors.hasOwnProperty(field)) {

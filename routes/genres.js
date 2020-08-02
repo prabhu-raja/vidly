@@ -3,6 +3,7 @@ const router = express.Router();
 const debug = require('debug')('node:genre');
 const { Genre, validate } = require('../models/genre');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 
 router.get('/', async (req, res) => {
   const genres = await Genre
@@ -49,7 +50,7 @@ router.put('/:id', async (req, res) => {
   res.send(genre);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
   // * 404 - Not Found
   const genre = await Genre.findByIdAndRemove(req.params.id);
   if (!genre) { return res.status(404).send('Genre Id not found 😈')}
