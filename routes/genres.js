@@ -4,14 +4,21 @@ const debug = require('debug')('node:genre');
 const { Genre, validate } = require('../models/genre');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const { restart } = require('nodemon');
 
 router.get('/', async (req, res) => {
-  const genres = await Genre
-    .find()
-    .sort({name: 'asc'})
-    .select({name: 1});
-  debug('Get all Genres 🛒', genres);
-  res.send(genres);
+  try {
+    const genres = await Genre
+      .find()
+      .sort({name: 'asc'})
+      .select({name: 1});
+    debug('Get all Genres', genres);
+    res.send(genres);
+  } catch (error) {
+    debug('Genres', error);
+    res.status(500).send('Something wrong 🧐. Please check');
+  }
+  
 });
 
 router.post('/', auth, async (req, res) => {
