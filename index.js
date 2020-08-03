@@ -10,6 +10,7 @@ const debug = require('debug')('node:index');
 const mongoose = require('mongoose');
 const config = require('config');
 const Joi = require('joi');
+const error = require('./middleware/error');
 Joi.objectId = require('joi-objectid')(Joi);
 
 if (!config.get('jwtPrivateKey')) {
@@ -31,6 +32,7 @@ app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+app.use(error);
 
 const port = process.env.port || 5000;
 app.listen(port, () => debug(`🏁 🏎 ⚡️ ⚡️ Listening on port: ${port} ⚡️ ⚡️`));

@@ -6,7 +6,7 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const { restart } = require('nodemon');
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const genres = await Genre
       .find()
@@ -16,9 +16,8 @@ router.get('/', async (req, res) => {
     res.send(genres);
   } catch (error) {
     debug('Genres', error);
-    res.status(500).send('Something wrong 🧐. Please check');
+    next(error);
   }
-  
 });
 
 router.post('/', auth, async (req, res) => {
