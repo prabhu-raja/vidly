@@ -4,17 +4,8 @@ const debug = require('debug')('node:genre');
 const { Genre, validate } = require('../models/genre');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const asyncMiddleWare = require('../middleware/asyncerrorhandle');
 
-function asyncMiddleWare(handler) {
-  return async (req, res, next) => {
-    try {
-      await handler(req, res);
-    } catch (error) {
-      debug('reachbed here');
-      next(error);
-    }
-  }
-}
 router.get('/', asyncMiddleWare(async (req, res, next) => {
   const genres = await Genre
     .find()
