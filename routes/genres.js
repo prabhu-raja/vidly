@@ -4,16 +4,15 @@ const debug = require('debug')('node:genre');
 const { Genre, validate } = require('../models/genre');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
-const asyncMiddleWare = require('../middleware/asyncerrorhandle');
 
-router.get('/', asyncMiddleWare(async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   const genres = await Genre
     .find()
     .sort({name: 'asc'})
     .select({name: 1});
   debug('Get all Genres', genres);
   res.send(genres);
-}));
+});
 
 router.post('/', auth, async (req, res) => {
   const { error } = validate(req.body);
