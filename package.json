@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/prabhu-raja/vidly#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "joi": "^14.3.1"
